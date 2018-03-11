@@ -1,0 +1,23 @@
+name: hotel_door_app
+description: Hotel Door System App
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.0
+  url_launcher: ^2.0.2
+  shared_preferences: ^0.3.0
+  intl: ^0.15.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+      - images/hotel.jpg
