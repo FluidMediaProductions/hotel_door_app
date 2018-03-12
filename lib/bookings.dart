@@ -4,6 +4,7 @@ import 'graphql.dart';
 import 'utils.dart';
 import 'consts.dart';
 import 'booking.dart';
+import 'data_types.dart';
 
 class Bookings extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class Bookings extends StatefulWidget {
 }
 
 class BookingsState extends State<Bookings> {
-  final _graphqlClient = new GraphQLClient();
+  final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
 
   List<Booking> _bookings = [];
 
@@ -25,25 +26,34 @@ class BookingsState extends State<Bookings> {
           "        ID\n"
           "        start\n"
           "        end\n"
+          "        hotel {\n"
+          "          ID\n"
+          "          name\n"
+          "        }\n"
           "      }\n"
           "    }\n"
           "  }\n"
           "}";
-      _graphqlClient.runQuery(GRAPHQL_SERVER_URL, query, {
+      _graphqlClient.runQuery(query, {
         "token": jwt,
       }).then((resp) {
         setState(() {
           _bookings = [];
 
           if (resp["data"]["auth"] != null) {
-            List<Map<String, Object>> bookings =
+            List<Map<String, dynamic>> bookings =
                 resp["data"]["auth"]["self"]["bookings"];
             if (bookings != null) {
               bookings.forEach((v) {
+                var hotel = new Hotel(
+                  id: v["hotel"]["ID"],
+                  name: v["hotel"]["name"],
+                );
                 _bookings.add(new Booking(
                   id: v["ID"],
                   start: DateTime.parse(v["start"]),
                   end: DateTime.parse(v["end"]),
+                  hotel: hotel,
                 ));
               });
             }
@@ -75,7 +85,7 @@ class BookingsState extends State<Bookings> {
             ),
           ),
           new ListTile(
-            title: new Text('A hotel'),
+            title: new Text(booking.hotel.name),
             subtitle: formatDate(booking.start, booking.end),
           ),
           new ButtonTheme.bar(
@@ -87,8 +97,8 @@ class BookingsState extends State<Bookings> {
                     Navigator.of(context).push(
                           new MaterialPageRoute(
                             builder: (_) => new BookingPage(
-                              booking: booking,
-                            ),
+                                  booking: booking,
+                                ),
                           ),
                         );
                   },

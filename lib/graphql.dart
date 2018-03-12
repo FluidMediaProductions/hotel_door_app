@@ -4,15 +4,18 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class GraphQLClient {
-  final httpClient = createHttpClient();
+  GraphQLClient(this.endpoint);
 
-  Future<Map> runQuery(String url, String query, Map variables) async {
+  final httpClient = createHttpClient();
+  final String endpoint;
+
+  Future<Map> runQuery(String query, Map variables) async {
     String req = JSON.encode({
       "query": query,
       "variables": variables,
     });
     var response = await httpClient.post(
-      url,
+      this.endpoint,
       body: req,
       headers: {
         "Content-Type": "application/json",

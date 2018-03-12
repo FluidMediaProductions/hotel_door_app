@@ -10,7 +10,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class SplashPageState extends State<SplashPage> {
-  final _graphqlClient = new GraphQLClient();
+  final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class SplashPageState extends State<SplashPage> {
           "    }\n"
           "  }\n"
           "}";
-      return _graphqlClient.runQuery(GRAPHQL_SERVER_URL, query, {
+      return _graphqlClient.runQuery(query, {
         "token": jwt,
       }).then((resp) {
         return (resp["data"]["auth"] != null);

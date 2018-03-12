@@ -10,7 +10,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  final _graphqlClient = new GraphQLClient();
+  final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _email, _password;
   final _formKey = new GlobalKey<FormState>();
@@ -39,7 +39,7 @@ class LoginState extends State<Login> {
     String query = "mutation (\$email: String!, \$pass: String!) {"
         "loginUser(email: \$email, pass: \$pass)"
         "}";
-    return _graphqlClient.runQuery(GRAPHQL_SERVER_URL, query, {
+    return _graphqlClient.runQuery(query, {
       "email": _email,
       "pass": _password,
     }).then((resp) {

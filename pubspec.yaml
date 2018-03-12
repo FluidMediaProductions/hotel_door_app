@@ -21,3 +21,4 @@ flutter:
 
   assets:
       - images/hotel.jpg
+      - images/loading.png

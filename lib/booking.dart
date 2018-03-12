@@ -4,14 +4,7 @@ import 'package:intl/intl.dart';
 import 'utils.dart';
 import 'graphql.dart';
 import 'consts.dart';
-
-class Booking {
-  final int id;
-  final DateTime start;
-  final DateTime end;
-
-  Booking({this.id, this.start, this.end});
-}
+import 'data_types.dart';
 
 class BookingPage extends StatefulWidget {
   final Booking booking;
@@ -23,6 +16,42 @@ class BookingPage extends StatefulWidget {
 }
 
 class BookingPageState extends State<BookingPage> {
+  final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
+
+  Hotel _hotel;
+
+  _getHotelDetails() async {
+    String query = "query (\$id: Int!) {\n"
+        "  hotel(id: \$id) {\n"
+        "    checkIn\n"
+        "    address\n"
+        "  }\n"
+        "}";
+    _graphqlClient.runQuery(query, {
+      "id": _hotel.id,
+    }).then((resp) {
+      setState(() {
+        if (resp["data"]["hotel"] != null) {
+          Map<String, dynamic> hotel = resp["data"]["hotel"];
+          _hotel = new Hotel(
+            id: _hotel.id,
+            name: _hotel.name,
+            checkIn: DateTime.parse(hotel["checkIn"]),
+            address: hotel["address"],
+          );
+        }
+      });
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+
+    _hotel = widget.booking.hotel;
+    _getHotelDetails();
+  }
+
   Widget buildButtonColumn(IconData icon, String label, String data) {
     Color color = Theme.of(context).primaryColor;
 
@@ -81,27 +110,47 @@ class BookingPageState extends State<BookingPage> {
           new Container(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-                  new Text('Booking at random hotel', style: titleTextStyle)),
+                  new Text('Booking at ' + _hotel.name, style: titleTextStyle)),
           formatDate(widget.booking.start, widget.booking.end),
         ],
       ),
     );
 
-    Widget bookingInfo =
-        new Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      buildButtonColumn(Icons.vpn_key, "ROOM:", "23"),
-      buildButtonColumn(Icons.arrow_upward, "FLOOR:", "G"),
-      buildButtonColumn(Icons.access_time, "CHECK IN:", "2pm"),
-    ]);
+    Widget bookingInfo = new Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: (_hotel.address != null)
+          ? [
+              buildButtonColumn(Icons.vpn_key, "ROOM:", "23"),
+              buildButtonColumn(Icons.arrow_upward, "FLOOR:", "G"),
+              buildButtonColumn(Icons.access_time, "CHECK IN:", "2pm"),
+            ]
+          : [
+              new Expanded(
+                child: new Center(
+                  child: new CircularProgressIndicator(),
+                ),
+              )
+            ],
+    );
 
-    const loc = "13 Pen-y-Lan Terrace";
     Widget map = new Container(
       padding: const EdgeInsets.only(top: 20.0),
       child: new GestureDetector(
-        child: makeStaticMap(loc, MAPS_API_KEY),
-        onTap: () {
-          launchURL(makeMapURL(loc));
-        },
+        child: (_hotel.address != null)
+            ? new FadeInImage(
+                placeholder: new AssetImage("images/loading.png"),
+                image: makeStaticMap(_hotel.address, MAPS_API_KEY),
+                height: 400.0,
+                fit: BoxFit.cover,
+              )
+            : new Image(
+                image: new AssetImage("images/loading.png"),
+              ),
+        onTap: (_hotel.address != null)
+            ? () {
+                launchURL(makeMapURL(_hotel.address));
+              }
+            : () {},
       ),
     );
 
