@@ -30,6 +30,9 @@ class BookingsState extends State<Bookings> {
           "          ID\n"
           "          name\n"
           "        }\n"
+          "        room {\n"
+          "          ID\n"
+          "        }"
           "      }\n"
           "    }\n"
           "  }\n"
@@ -49,11 +52,15 @@ class BookingsState extends State<Bookings> {
                   id: v["hotel"]["ID"],
                   name: v["hotel"]["name"],
                 );
+                var room = new Room(
+                  id: v["room"]["ID"],
+                );
                 _bookings.add(new Booking(
                   id: v["ID"],
                   start: DateTime.parse(v["start"]),
                   end: DateTime.parse(v["end"]),
                   hotel: hotel,
+                  room: room,
                 ));
               });
             }

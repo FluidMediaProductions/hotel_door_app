@@ -19,16 +19,22 @@ class BookingPageState extends State<BookingPage> {
   final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
 
   Hotel _hotel;
+  Room _room;
 
-  _getHotelDetails() async {
-    String query = "query (\$id: Int!) {\n"
-        "  hotel(id: \$id) {\n"
+  _getBookingDetails() async {
+    String query = "query (\$hotelId: Int!, \$roomId: Int!) {\n"
+        "  hotel(id: \$hotelId) {\n"
         "    checkIn\n"
         "    address\n"
         "  }\n"
+        "  room(id: \$roomId) {\n"
+        "    name\n"
+        "    floor\n"
+        "  }\n"
         "}";
     _graphqlClient.runQuery(query, {
-      "id": _hotel.id,
+      "hotelId": _hotel.id,
+      "roomId": _room.id,
     }).then((resp) {
       setState(() {
         if (resp["data"]["hotel"] != null) {
@@ -40,6 +46,14 @@ class BookingPageState extends State<BookingPage> {
             address: hotel["address"],
           );
         }
+        if (resp["data"]["room"] != null) {
+          Map<String, dynamic> room = resp["data"]["room"];
+          _room = new Room(
+            id: _room.id,
+            name: room["name"],
+            floor: room["floor"],
+          );
+        }
       });
     });
   }
@@ -49,7 +63,8 @@ class BookingPageState extends State<BookingPage> {
     super.initState();
 
     _hotel = widget.booking.hotel;
-    _getHotelDetails();
+    _room = widget.booking.room;
+    _getBookingDetails();
   }
 
   Widget buildButtonColumn(IconData icon, String label, String data) {
@@ -121,10 +136,12 @@ class BookingPageState extends State<BookingPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: (_hotel.address != null)
           ? [
-              buildButtonColumn(Icons.vpn_key, "ROOM:", "23"),
-              buildButtonColumn(Icons.arrow_upward, "FLOOR:", "G"),
-              buildButtonColumn(Icons.access_time, "CHECK IN:", formatter.format(_hotel.checkIn)),
-          ] : [
+              buildButtonColumn(Icons.vpn_key, "ROOM:", _room.name),
+              buildButtonColumn(Icons.arrow_upward, "FLOOR:", _room.floor),
+              buildButtonColumn(Icons.access_time, "CHECK IN:",
+                  formatter.format(_hotel.checkIn)),
+            ]
+          : [
               new Expanded(
                 child: new Center(
                   child: new CircularProgressIndicator(),
