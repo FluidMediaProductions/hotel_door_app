@@ -116,15 +116,15 @@ class BookingPageState extends State<BookingPage> {
       ),
     );
 
+    var formatter = new DateFormat('j');
     Widget bookingInfo = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: (_hotel.address != null)
           ? [
               buildButtonColumn(Icons.vpn_key, "ROOM:", "23"),
               buildButtonColumn(Icons.arrow_upward, "FLOOR:", "G"),
-              buildButtonColumn(Icons.access_time, "CHECK IN:", "2pm"),
-            ]
-          : [
+              buildButtonColumn(Icons.access_time, "CHECK IN:", formatter.format(_hotel.checkIn)),
+          ] : [
               new Expanded(
                 child: new Center(
                   child: new CircularProgressIndicator(),
@@ -140,11 +140,11 @@ class BookingPageState extends State<BookingPage> {
             ? new FadeInImage(
                 placeholder: new AssetImage("images/loading.png"),
                 image: makeStaticMap(_hotel.address, MAPS_API_KEY),
-                height: 400.0,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               )
             : new Image(
                 image: new AssetImage("images/loading.png"),
+                fit: BoxFit.contain,
               ),
         onTap: (_hotel.address != null)
             ? () {
