@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,10 +16,12 @@ class BookingPage extends StatefulWidget {
   BookingPageState createState() => new BookingPageState();
 }
 
-class BookingPageState extends State<BookingPage> {
+class BookingPageState extends State<BookingPage>
+    with TickerProviderStateMixin {
   final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
 
   Hotel _hotel;
+  AnimationController _fabController;
 
   _getHotelDetails() async {
     String query = "query (\$id: Int!) {\n"
@@ -48,6 +51,12 @@ class BookingPageState extends State<BookingPage> {
   initState() {
     super.initState();
 
+    _fabController = new AnimationController(
+      vsync: this,
+      duration: new Duration(
+        milliseconds: 500,
+      ),
+    );
     _hotel = widget.booking.hotel;
     _getHotelDetails();
   }
@@ -159,12 +168,77 @@ class BookingPageState extends State<BookingPage> {
     );
   }
 
+  Widget _buildFab() {
+    List<List> actions = [
+      ["Car park", Icons.directions_car],
+      ["Front door", Icons.home],
+      ["Room", Icons.hotel]
+    ];
+    Color backgroundColour = Theme.of(context).cardColor;
+    Color forgroundColour = Theme.of(context).accentColor;
+    int length = 3;
+    return new Column(
+      mainAxisSize: MainAxisSize.min,
+      children: new List.generate(
+        actions.length,
+        (int i) {
+          Widget child = new Container(
+            height: 70.0,
+            width: 56.0,
+            alignment: FractionalOffset.center,
+            child: new ScaleTransition(
+              scale: new CurvedAnimation(
+                parent: _fabController,
+                curve: new Interval(0.0, 1.0 - i / actions.length / 2.0,
+                    curve: Curves.easeOut),
+              ),
+              child: new FloatingActionButton(
+                onPressed: () {},
+                mini: true,
+                backgroundColor: backgroundColour,
+                child: new Icon(
+                  actions[i][1],
+                  color: forgroundColour,
+                ),
+                tooltip: actions[i][0],
+              ),
+            ),
+          );
+          return child;
+        },
+      ).toList()
+        ..add(new FloatingActionButton(
+          child: new AnimatedBuilder(
+            animation: _fabController,
+            builder: (BuildContext context, Widget child) {
+              return new Transform(
+                transform:
+                    new Matrix4.rotationZ(_fabController.value * 0.5 * PI),
+                alignment: FractionalOffset.center,
+                child: new Icon(
+                  _fabController.isDismissed ? Icons.lock_open : Icons.close,
+                ),
+              );
+            },
+          ),
+          onPressed: () {
+            if (_fabController.isDismissed) {
+              _fabController.forward();
+            } else {
+              _fabController.reverse();
+            }
+          },
+        )),
+    );
+  }
+
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('View booking'),
       ),
       body: _buildBody(),
+      floatingActionButton: _buildFab(),
     );
   }
 }
