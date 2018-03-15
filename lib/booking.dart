@@ -22,16 +22,22 @@ class BookingPageState extends State<BookingPage>
 
   Hotel _hotel;
   AnimationController _fabController;
+  Room _room;
 
-  _getHotelDetails() async {
-    String query = "query (\$id: Int!) {\n"
-        "  hotel(id: \$id) {\n"
+  _getBookingDetails() async {
+    String query = "query (\$hotelId: Int!, \$roomId: Int!) {\n"
+        "  hotel(id: \$hotelId) {\n"
         "    checkIn\n"
         "    address\n"
         "  }\n"
+        "  room(id: \$roomId) {\n"
+        "    name\n"
+        "    floor\n"
+        "  }\n"
         "}";
     _graphqlClient.runQuery(query, {
-      "id": _hotel.id,
+      "hotelId": _hotel.id,
+      "roomId": _room.id,
     }).then((resp) {
       setState(() {
         if (resp["data"]["hotel"] != null) {
@@ -41,6 +47,14 @@ class BookingPageState extends State<BookingPage>
             name: _hotel.name,
             checkIn: DateTime.parse(hotel["checkIn"]),
             address: hotel["address"],
+          );
+        }
+        if (resp["data"]["room"] != null) {
+          Map<String, dynamic> room = resp["data"]["room"];
+          _room = new Room(
+            id: _room.id,
+            name: room["name"],
+            floor: room["floor"],
           );
         }
       });
@@ -58,7 +72,8 @@ class BookingPageState extends State<BookingPage>
       ),
     );
     _hotel = widget.booking.hotel;
-    _getHotelDetails();
+    _room = widget.booking.room;
+    _getBookingDetails();
   }
 
   Widget buildButtonColumn(IconData icon, String label, String data) {
@@ -125,13 +140,15 @@ class BookingPageState extends State<BookingPage>
       ),
     );
 
+    var formatter = new DateFormat('j');
     Widget bookingInfo = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: (_hotel.address != null)
           ? [
-              buildButtonColumn(Icons.vpn_key, "ROOM:", "23"),
-              buildButtonColumn(Icons.arrow_upward, "FLOOR:", "G"),
-              buildButtonColumn(Icons.access_time, "CHECK IN:", "2pm"),
+              buildButtonColumn(Icons.vpn_key, "ROOM:", _room.name),
+              buildButtonColumn(Icons.arrow_upward, "FLOOR:", _room.floor),
+              buildButtonColumn(Icons.access_time, "CHECK IN:",
+                  formatter.format(_hotel.checkIn)),
             ]
           : [
               new Expanded(
@@ -149,11 +166,11 @@ class BookingPageState extends State<BookingPage>
             ? new FadeInImage(
                 placeholder: new AssetImage("images/loading.png"),
                 image: makeStaticMap(_hotel.address, MAPS_API_KEY),
-                height: 400.0,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               )
             : new Image(
                 image: new AssetImage("images/loading.png"),
+                fit: BoxFit.contain,
               ),
         onTap: (_hotel.address != null)
             ? () {
