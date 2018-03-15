@@ -19,46 +19,55 @@ class BookingPage extends StatefulWidget {
 class BookingPageState extends State<BookingPage>
     with TickerProviderStateMixin {
   final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Hotel _hotel;
   AnimationController _fabController;
   Room _room;
 
   _getBookingDetails() async {
-    String query = "query (\$hotelId: Int!, \$roomId: Int!) {\n"
-        "  hotel(id: \$hotelId) {\n"
-        "    checkIn\n"
-        "    address\n"
-        "  }\n"
-        "  room(id: \$roomId) {\n"
-        "    name\n"
-        "    floor\n"
-        "  }\n"
-        "}";
-    _graphqlClient.runQuery(query, {
-      "hotelId": _hotel.id,
-      "roomId": _room.id,
-    }).then((resp) {
-      setState(() {
-        if (resp["data"]["hotel"] != null) {
-          Map<String, dynamic> hotel = resp["data"]["hotel"];
-          _hotel = new Hotel(
-            id: _hotel.id,
-            name: _hotel.name,
-            checkIn: DateTime.parse(hotel["checkIn"]),
-            address: hotel["address"],
-          );
-        }
-        if (resp["data"]["room"] != null) {
-          Map<String, dynamic> room = resp["data"]["room"];
-          _room = new Room(
-            id: _room.id,
-            name: room["name"],
-            floor: room["floor"],
-          );
-        }
+    try {
+      String query = "query (\$hotelId: Int!, \$roomId: Int!) {\n"
+          "  hotel(id: \$hotelId) {\n"
+          "    checkIn\n"
+          "    address\n"
+          "  }\n"
+          "  room(id: \$roomId) {\n"
+          "    name\n"
+          "    floor\n"
+          "  }\n"
+          "}";
+      _graphqlClient.runQuery(query, {
+        "hotelId": _hotel.id,
+        "roomId": _room.id,
+      }).then((resp) {
+        setState(() {
+          if (resp["data"]["hotel"] != null) {
+            Map<String, dynamic> hotel = resp["data"]["hotel"];
+            _hotel = new Hotel(
+              id: _hotel.id,
+              name: _hotel.name,
+              checkIn: DateTime.parse(hotel["checkIn"]),
+              address: hotel["address"],
+            );
+          }
+          if (resp["data"]["room"] != null) {
+            Map<String, dynamic> room = resp["data"]["room"];
+            _room = new Room(
+              id: _room.id,
+              name: room["name"],
+              floor: room["floor"],
+            );
+          }
+        });
       });
-    });
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("Something went wrong"),
+        ),
+      );
+    }
   }
 
   @override
@@ -79,7 +88,7 @@ class BookingPageState extends State<BookingPage>
   Widget buildButtonColumn(IconData icon, String label, String data) {
     Color color = Theme.of(context).primaryColor;
 
-    var descTextStyle = new TextStyle(
+    var descTextStyle = const TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.w500,
       fontFamily: 'Roboto',
@@ -108,7 +117,7 @@ class BookingPageState extends State<BookingPage>
       ),
     );
 
-    var titleTextStyle = new TextStyle(
+    var titleTextStyle = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16.0,
     );
@@ -132,9 +141,12 @@ class BookingPageState extends State<BookingPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           new Container(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child:
-                  new Text('Booking at ' + _hotel.name, style: titleTextStyle)),
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: new Text(
+              'Booking at ' + _hotel.name,
+              style: titleTextStyle,
+            ),
+          ),
           formatDate(widget.booking.start, widget.booking.end),
         ],
       ),
@@ -151,12 +163,26 @@ class BookingPageState extends State<BookingPage>
                   formatter.format(_hotel.checkIn)),
             ]
           : [
-              new Expanded(
-                child: new Center(
-                  child: new CircularProgressIndicator(),
+              const Expanded(
+                child: const Center(
+                  child: const CircularProgressIndicator(),
                 ),
               )
             ],
+    );
+
+    Widget openButton = new Container(
+      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+      child: new RaisedButton(
+        child: const Text(
+          "Open door",
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        color: Colors.blueAccent,
+        onPressed: () {},
+      ),
     );
 
     Widget map = new Container(
@@ -164,12 +190,12 @@ class BookingPageState extends State<BookingPage>
       child: new GestureDetector(
         child: (_hotel.address != null)
             ? new FadeInImage(
-                placeholder: new AssetImage("images/loading.png"),
+                placeholder: const AssetImage("images/loading.png"),
                 image: makeStaticMap(_hotel.address, MAPS_API_KEY),
                 fit: BoxFit.contain,
               )
-            : new Image(
-                image: new AssetImage("images/loading.png"),
+            : const Image(
+                image: const AssetImage("images/loading.png"),
                 fit: BoxFit.contain,
               ),
         onTap: (_hotel.address != null)
@@ -181,7 +207,7 @@ class BookingPageState extends State<BookingPage>
     );
 
     return new ListView(
-      children: [image, bookingSummary, bookingInfo, map],
+      children: [image, bookingSummary, bookingInfo, openButton, map],
     );
   }
 
@@ -251,6 +277,7 @@ class BookingPageState extends State<BookingPage>
 
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: new Text('View booking'),
       ),

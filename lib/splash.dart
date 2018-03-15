@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'utils.dart';
@@ -36,11 +37,16 @@ class SplashPageState extends State<SplashPage> {
           "    }\n"
           "  }\n"
           "}";
-      return _graphqlClient.runQuery(query, {
-        "token": jwt,
-      }).then((resp) {
-        return (resp["data"]["auth"] != null);
-      });
+      try {
+        return _graphqlClient.runQuery(query, {
+          "token": jwt,
+        }).then((resp) {
+          return (resp["data"]["auth"] != null);
+        });
+      } catch (e) {
+        sleep(const Duration(seconds: 1));
+        return _getIsLoggedIn();
+      }
     } else {
       return false;
     }

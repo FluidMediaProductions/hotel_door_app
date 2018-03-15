@@ -17,6 +17,7 @@ class BookingsState extends State<Bookings> {
   List<Booking> _bookings = [];
 
   _getBookings() async {
+    try {
     String jwt = await getJwt();
     if (jwt != null) {
       String query = "query (\$token: String!) {\n"
@@ -68,6 +69,14 @@ class BookingsState extends State<Bookings> {
         });
       });
     }
+
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(
+        new SnackBar(
+          content: new Text("Something went wrong"),
+        ),
+      );
+    }
   }
 
   Widget _makeBookingCard(Booking booking) {
@@ -102,12 +111,13 @@ class BookingsState extends State<Bookings> {
                   child: const Text('VIEW'),
                   onPressed: () {
                     Navigator.of(context).push(
-                          new MaterialPageRoute(
-                            builder: (_) => new BookingPage(
-                                  booking: booking,
-                                ),
-                          ),
-                        );
+                      new MaterialPageRoute(
+                        builder: (_) =>
+                        new BookingPage(
+                          booking: booking,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ],
