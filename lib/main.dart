@@ -43,16 +43,20 @@ class HotelDoorAppState extends State<HotelDoorApp> {
 void main() {
   debugPaintSizeEnabled = false;
   FlutterError.onError = (errorDetails) async {
-    await sentry.captureException(
-      exception: errorDetails,
-    );
+    print(errorDetails);
+//    await sentry.captureException(
+//      exception: errorDetails.exception,
+//      stackTrace: errorDetails.stack
+//    );
   };
   runZoned(() {
     runApp(new HotelDoorApp());
   }, onError: (error, stack) async {
-    await sentry.captureException(
-      exception: error,
-      stackTrace: stack,
-    );
+    print(error);
+    print(stack);
+//    await sentry.captureException(
+//      exception: error,
+//      stackTrace: stack,
+//    );
   });
 }

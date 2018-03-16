@@ -129,7 +129,7 @@ class BookingPageState extends State<BookingPage>
           "token": jwt,
           "hotelId": _hotel.id,
         }).then((resp) {
-          if (resp["data"]["auth"]["openRoom"]) {
+          if (resp["data"]["auth"]["openHotelDoor"]) {
             _scaffoldKey.currentState.showSnackBar(
               new SnackBar(
                 content: new Text("Door opened"),
@@ -258,20 +258,6 @@ class BookingPageState extends State<BookingPage>
             ],
     );
 
-    Widget openButton = new Container(
-      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      child: new RaisedButton(
-        child: const Text(
-          "Open door",
-          style: const TextStyle(
-            fontSize: 16.0,
-          ),
-        ),
-        color: Colors.blueAccent,
-        onPressed: () {},
-      ),
-    );
-
     Widget map = new Container(
       padding: const EdgeInsets.only(top: 20.0),
       child: new GestureDetector(
@@ -294,7 +280,7 @@ class BookingPageState extends State<BookingPage>
     );
 
     return new ListView(
-      children: [image, bookingSummary, bookingInfo, openButton, map],
+      children: [image, bookingSummary, bookingInfo, map],
     );
   }
 
@@ -324,12 +310,13 @@ class BookingPageState extends State<BookingPage>
     Color forgroundColour = Theme.of(context).accentColor;
     return new Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: new List.generate(
         actions.length,
         (int i) {
           Widget child = new Container(
-            height: 70.0,
-            width: 56.0,
+            height: 50.0,
+            width: 200.0,
             alignment: FractionalOffset.center,
             child: new ScaleTransition(
               scale: new CurvedAnimation(
@@ -337,24 +324,41 @@ class BookingPageState extends State<BookingPage>
                 curve: new Interval(0.0, 1.0 - i / actions.length / 2.0,
                     curve: Curves.easeOut),
               ),
-              child: new FloatingActionButton(
-                mini: true,
-                backgroundColor: backgroundColour,
-                child: new Icon(
-                  actions[i].icon,
-                  color: forgroundColour,
-                ),
-                tooltip: actions[i].label,
-                onPressed: () {
-                  _fabController.reverse();
-                  actions[i].action();
-                },
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  new Container(
+                    child: new Text(actions[i].label),
+                    padding: const EdgeInsets.all(5.0),
+                    margin: const EdgeInsets.only(right: 5.0),
+                    color: Colors.white70,
+                  ),
+                  new FloatingActionButton(
+                    heroTag: actions[i].label,
+                    mini: true,
+                    backgroundColor: backgroundColour,
+                    child: new Icon(
+                      actions[i].icon,
+                      color: forgroundColour,
+                    ),
+                    onPressed: () {
+                      _fabController.reverse();
+                      actions[i].action();
+                    },
+                  ),
+                  new Container(
+                    width: 8.0,
+                  )
+                ],
               ),
             ),
           );
           return child;
         },
       ).toList()
+      ..add(new Container(
+        height: 8.0,
+      ))
         ..add(new FloatingActionButton(
           child: new AnimatedBuilder(
             animation: _fabController,
