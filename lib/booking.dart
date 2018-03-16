@@ -299,14 +299,29 @@ class BookingPageState extends State<BookingPage>
   }
 
   Widget _buildFab() {
-    List<List> actions = [
-      ["Car park", Icons.directions_car],
-      ["Front door", Icons.home],
-      ["Room", Icons.hotel]
+    List<BookingAction> actions = [
+      new BookingAction(
+        label: "Car Park",
+        icon: Icons.directions_car,
+        action: () {},
+      ),
+      new BookingAction(
+        label: "Front Door",
+        icon: Icons.home,
+        action: () {
+          _openHotelDoor();
+        },
+      ),
+      new BookingAction(
+        label: "Room",
+        icon: Icons.hotel,
+        action: () {
+          _openRoom();
+        },
+      ),
     ];
     Color backgroundColour = Theme.of(context).cardColor;
     Color forgroundColour = Theme.of(context).accentColor;
-    int length = 3;
     return new Column(
       mainAxisSize: MainAxisSize.min,
       children: new List.generate(
@@ -323,14 +338,17 @@ class BookingPageState extends State<BookingPage>
                     curve: Curves.easeOut),
               ),
               child: new FloatingActionButton(
-                onPressed: () {},
                 mini: true,
                 backgroundColor: backgroundColour,
                 child: new Icon(
-                  actions[i][1],
+                  actions[i].icon,
                   color: forgroundColour,
                 ),
-                tooltip: actions[i][0],
+                tooltip: actions[i].label,
+                onPressed: () {
+                  _fabController.reverse();
+                  actions[i].action();
+                },
               ),
             ),
           );

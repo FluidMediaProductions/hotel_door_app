@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Booking {
   final int id;
@@ -25,4 +26,12 @@ class Room {
   final String floor;
 
   Room({@required this.id, this.name, this.floor});
+}
+
+class BookingAction {
+  final String label;
+  final IconData icon;
+  final Function action;
+
+  BookingAction({@required this.label, @required this.icon, @required this.action});
 }
