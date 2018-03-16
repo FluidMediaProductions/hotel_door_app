@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'main.dart';
 import 'utils.dart';
 import 'graphql.dart';
 import 'consts.dart';
@@ -61,11 +62,56 @@ class BookingPageState extends State<BookingPage>
           }
         });
       });
-    } catch (e) {
+    } catch (error, stack) {
       _scaffoldKey.currentState.showSnackBar(
         new SnackBar(
           content: new Text("Something went wrong"),
         ),
+      );
+      await sentry.captureException(
+        exception: error,
+        stackTrace: stack,
+      );
+    }
+  }
+
+  _openRoom() async {
+    try {
+      String jwt = await getJwt();
+      if (jwt != null) {
+        String query = "mutation (\$token: String!, \$roomId: Int!) {\n"
+            "  auth(token: \$token) {\n"
+            "    openRoom(id: \$roomId)\n"
+            "  }\n"
+            "}";
+        _graphqlClient.runQuery(query, {
+          "token": jwt,
+          "roomId": _room.id,
+        }).then((resp) {
+          if (resp["data"]["auth"]["openRoom"]) {
+            _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(
+                content: new Text("Door opened"),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(
+                content: new Text("Something went wrong"),
+              ),
+            );
+          }
+        });
+      }
+    } catch (error, stack) {
+      _scaffoldKey.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("Something went wrong"),
+        ),
+      );
+      await sentry.captureException(
+        exception: error,
+        stackTrace: stack,
       );
     }
   }
