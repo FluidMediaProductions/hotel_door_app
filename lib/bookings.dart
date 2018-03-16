@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'main.dart';
 import 'graphql.dart';
 import 'utils.dart';
 import 'consts.dart';
@@ -70,11 +71,15 @@ class BookingsState extends State<Bookings> {
       });
     }
 
-    } catch (e) {
+    } catch (error, stack) {
       Scaffold.of(context).showSnackBar(
         new SnackBar(
           content: new Text("Something went wrong"),
         ),
+      );
+      await sentry.captureException(
+        exception: error,
+        stackTrace: stack,
       );
     }
   }

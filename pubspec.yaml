@@ -11,6 +11,7 @@ dependencies:
   url_launcher: ^2.0.2
   shared_preferences: ^0.3.0
   intl: ^0.15.2
+  sentry: any
 
 dev_dependencies:
   flutter_test:

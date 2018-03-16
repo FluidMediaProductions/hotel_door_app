@@ -1,7 +1,11 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+
+class GraphQlException implements Exception {
+  List<String> errors;
+  GraphQlException(this.errors);
+}
 
 class GraphQLClient {
   GraphQLClient(this.endpoint);
@@ -23,6 +27,12 @@ class GraphQLClient {
       },
     );
     Map resp = JSON.decode(response.body);
+    if (resp["errors"] != null) {
+      List errors = resp["errors"];
+      throw new GraphQlException(errors.map((v) {
+        return v["message"];
+      }).toList());
+    }
     return resp;
   }
 }

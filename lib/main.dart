@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:sentry/sentry.dart';
 import 'home.dart';
 import 'login.dart';
 import 'splash.dart';
+import 'consts.dart';
+
+final SentryClient sentry = new SentryClient(dsn: SENTRY_DSN);
 
 class HotelDoorApp extends StatefulWidget {
   @override
@@ -37,5 +42,17 @@ class HotelDoorAppState extends State<HotelDoorApp> {
 
 void main() {
   debugPaintSizeEnabled = false;
-  runApp(new HotelDoorApp());
+  FlutterError.onError = (errorDetails) async {
+    await sentry.captureException(
+      exception: errorDetails,
+    );
+  };
+  runZoned(() {
+    runApp(new HotelDoorApp());
+  }, onError: (error, stack) async {
+    await sentry.captureException(
+      exception: error,
+      stackTrace: stack,
+    );
+  });
 }
