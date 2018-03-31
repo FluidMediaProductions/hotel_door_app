@@ -196,11 +196,14 @@ class BookingPageState extends State<BookingPage>
   }
 
   Widget _buildBody() {
+    Orientation orientation = MediaQuery.of(context).orientation;
+    Size screenSize = MediaQuery.of(context).size;
+
     Widget image = new Hero(
       tag: 'booking_' + widget.booking.id.toString(),
       child: new Image.asset(
         "images/hotel.jpg",
-        height: 240.0,
+        height: screenSize.height / 3,
         fit: BoxFit.cover,
       ),
     );
@@ -243,6 +246,7 @@ class BookingPageState extends State<BookingPage>
     var formatter = new DateFormat('j');
     Widget bookingInfo = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.max,
       children: (_hotel.address != null)
           ? [
               buildButtonColumn(Icons.vpn_key, "ROOM:", _room.name),
@@ -260,31 +264,71 @@ class BookingPageState extends State<BookingPage>
     );
 
     Widget map = new Container(
-      padding: const EdgeInsets.only(top: 20.0),
-      child: new LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        return new GestureDetector(
-          child: (_hotel.address != null)
-              ? new FadeInImage(
-            placeholder: const AssetImage("images/loading.png"),
-            image: makeStaticMap(_hotel.address, MAPS_API_KEY, (constraints.maxWidth/19*9).toInt(), constraints.maxWidth.toInt()),
-            fit: BoxFit.contain,
-          )
-              : const Image(
-            image: const AssetImage("images/loading.png"),
-            fit: BoxFit.contain,
-          ),
-          onTap: (_hotel.address != null)
-              ? () {
-            launchURL(makeMapURL(_hotel.address));
-          }
-              : () {},
-        );
-      },),
+      child: new LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return new GestureDetector(
+            child: (_hotel.address != null)
+                ? new FadeInImage(
+                    placeholder: const AssetImage("images/loading.png"),
+                    image: makeStaticMap(
+                        _hotel.address,
+                        MAPS_API_KEY,
+                        screenSize.height ~/ 3 * 2,
+                        constraints.maxWidth.toInt()),
+                    fit: BoxFit.contain,
+                  )
+                : const Image(
+                    image: const AssetImage("images/loading.png"),
+                    fit: BoxFit.contain,
+                  ),
+            onTap: (_hotel.address != null)
+                ? () {
+                    launchURL(makeMapURL(_hotel.address));
+                  }
+                : () {},
+          );
+        },
+      ),
     );
 
-    return new ListView(
-      children: [image, bookingSummary, bookingInfo, map],
-    );
+    if (orientation == Orientation.portrait) {
+      return new ListView(
+        children: [
+          image,
+          bookingSummary,
+          bookingInfo,
+          new Container(
+            height: 20.0,
+          ),
+          map,
+        ],
+      );
+    } else {
+      return new ListView(
+        children: [
+          image,
+          new Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              new Container(
+                width: screenSize.width / 2,
+                child: map,
+              ),
+              new Container(
+                width: screenSize.width / 2,
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    bookingSummary,
+                    bookingInfo,
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildFab() {

@@ -9,7 +9,6 @@ NetworkImage makeStaticMap(String loc, String apiKey, int height, int width) {
   loc = Uri.encodeQueryComponent(loc);
   var url =
       "https://maps.googleapis.com/maps/api/staticmap?center=$loc&zoom=17&size=${width}x$height&scale=2&maptype=roadmap&markers=$markers&key=$apiKey";
-  print(url);
   return new NetworkImage(url);
 }
 

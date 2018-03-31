@@ -44,7 +44,6 @@ void main() {
   debugPaintSizeEnabled = false;
   if (const bool.fromEnvironment("dart.vm.product")) {
     FlutterError.onError = (errorDetails) async {
-      print(errorDetails);
       await sentry.captureException(
           exception: errorDetails.exception,
           stackTrace: errorDetails.stack
