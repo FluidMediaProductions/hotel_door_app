@@ -15,7 +15,7 @@ class SettingsState extends State<Settings> {
   setup() async {
     prefs = await SharedPreferences.getInstance();
     bool biometrics = await biometricsRequired();
-    
+
     setState(() {
       _biometricsRequired = biometrics;
     });
