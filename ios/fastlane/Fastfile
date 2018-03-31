@@ -7,11 +7,13 @@ platform :ios do
   lane :beta do
     ensure_git_status_clean
 
-    increment_build_number(xcodeproj: "Runner.xcodeproj")
-    commit_version_bump(xcodeproj: "Runner.xcodeproj")
-    add_git_tag
-    push_to_git_remote
+    #increment_build_number(xcodeproj: "Runner.xcodeproj")
+    #commit_version_bump(xcodeproj: "Runner.xcodeproj")
+    #add_git_tag
+    #push_to_git_remote
 
+    get_certificates
+    get_provisioning_profile
     sh "cd ../.. && flutter build ios --release --no-codesign"
     build_ios_app(
       workspace: 'Runner.xcworkspace',
