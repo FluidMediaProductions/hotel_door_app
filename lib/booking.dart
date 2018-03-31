@@ -76,86 +76,90 @@ class BookingPageState extends State<BookingPage>
     }
   }
 
-  _openRoom() async {
-    try {
-      String jwt = await getJwt();
-      if (jwt != null) {
-        String query = "mutation (\$token: String!, \$roomId: Int!) {\n"
-            "  auth(token: \$token) {\n"
-            "    openRoom(id: \$roomId)\n"
-            "  }\n"
-            "}";
-        _graphqlClient.runQuery(query, {
-          "token": jwt,
-          "roomId": _room.id,
-        }).then((resp) {
-          if (resp["data"]["auth"]["openRoom"]) {
-            _scaffoldKey.currentState.showSnackBar(
-              new SnackBar(
-                content: new Text("Door opened"),
-              ),
-            );
-          } else {
-            _scaffoldKey.currentState.showSnackBar(
-              new SnackBar(
-                content: new Text("Something went wrong"),
-              ),
-            );
-          }
-        });
+  _openRoom() {
+    authenticateAction(context, () async {
+      try {
+        String jwt = await getJwt();
+        if (jwt != null) {
+          String query = "mutation (\$token: String!, \$roomId: Int!) {\n"
+              "  auth(token: \$token) {\n"
+              "    openRoom(id: \$roomId)\n"
+              "  }\n"
+              "}";
+          _graphqlClient.runQuery(query, {
+            "token": jwt,
+            "roomId": _room.id,
+          }).then((resp) {
+            if (resp["data"]["auth"]["openRoom"]) {
+              _scaffoldKey.currentState.showSnackBar(
+                new SnackBar(
+                  content: new Text("Door opened"),
+                ),
+              );
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                new SnackBar(
+                  content: new Text("Something went wrong"),
+                ),
+              );
+            }
+          });
+        }
+      } catch (error, stack) {
+        _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(
+            content: new Text("Something went wrong"),
+          ),
+        );
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
       }
-    } catch (error, stack) {
-      _scaffoldKey.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("Something went wrong"),
-        ),
-      );
-      await sentry.captureException(
-        exception: error,
-        stackTrace: stack,
-      );
-    }
+    });
   }
 
-  _openHotelDoor() async {
-    try {
-      String jwt = await getJwt();
-      if (jwt != null) {
-        String query = "mutation (\$token: String!, \$hotelId: Int!) {\n"
-            "  auth(token: \$token) {\n"
-            "    openHotelDoor(id: \$hotelId)\n"
-            "  }\n"
-            "}";
-        _graphqlClient.runQuery(query, {
-          "token": jwt,
-          "hotelId": _hotel.id,
-        }).then((resp) {
-          if (resp["data"]["auth"]["openHotelDoor"]) {
-            _scaffoldKey.currentState.showSnackBar(
-              new SnackBar(
-                content: new Text("Door opened"),
-              ),
-            );
-          } else {
-            _scaffoldKey.currentState.showSnackBar(
-              new SnackBar(
-                content: new Text("Something went wrong"),
-              ),
-            );
-          }
-        });
+  _openHotelDoor() {
+    authenticateAction(context, () async {
+      try {
+        String jwt = await getJwt();
+        if (jwt != null) {
+          String query = "mutation (\$token: String!, \$hotelId: Int!) {\n"
+              "  auth(token: \$token) {\n"
+              "    openHotelDoor(id: \$hotelId)\n"
+              "  }\n"
+              "}";
+          _graphqlClient.runQuery(query, {
+            "token": jwt,
+            "hotelId": _hotel.id,
+          }).then((resp) {
+            if (resp["data"]["auth"]["openHotelDoor"]) {
+              _scaffoldKey.currentState.showSnackBar(
+                new SnackBar(
+                  content: new Text("Door opened"),
+                ),
+              );
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                new SnackBar(
+                  content: new Text("Something went wrong"),
+                ),
+              );
+            }
+          });
+        }
+      } catch (error, stack) {
+        _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(
+            content: new Text("Something went wrong"),
+          ),
+        );
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
       }
-    } catch (error, stack) {
-      _scaffoldKey.currentState.showSnackBar(
-        new SnackBar(
-          content: new Text("Something went wrong"),
-        ),
-      );
-      await sentry.captureException(
-        exception: error,
-        stackTrace: stack,
-      );
-    }
+    });
   }
 
   @override

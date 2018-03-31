@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bookings.dart';
+import 'settings.dart';
 import 'utils.dart';
 
 class Home extends StatefulWidget {
@@ -29,6 +30,11 @@ class HomeState extends State<Home> {
         "title": "Bookings",
         "icon": new Icon(Icons.hotel),
         "widget": new Bookings(),
+      },
+      "settings": {
+        "title": "Settings",
+        "icon": new Icon(Icons.settings),
+        "widget": new Settings(),
       }
     };
 

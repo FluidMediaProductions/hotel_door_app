@@ -57,7 +57,6 @@ class BookingsState extends State<Bookings> {
                 var room = new Room(
                   id: v["room"]["ID"],
                 );
-                print(room);
                 _bookings.add(new Booking(
                   id: v["ID"],
                   start: DateTime.parse(v["start"]),
