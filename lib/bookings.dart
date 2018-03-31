@@ -97,6 +97,7 @@ class BookingsState extends State<Bookings> {
 
       return new Text(startText + " - " + endText);
     }
+    Size screenSize = MediaQuery.of(context).size;
 
     return new Card(
       child: new Column(
@@ -106,7 +107,7 @@ class BookingsState extends State<Bookings> {
             tag: 'booking_' + booking.id.toString(),
             child: new Image.asset(
               "images/hotel.jpg",
-              height: 150.0,
+              height: screenSize.height / 3,
               fit: BoxFit.cover,
             ),
           ),
