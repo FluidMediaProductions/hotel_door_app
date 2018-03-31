@@ -17,8 +17,10 @@ platform :android do
     ensure_git_status_clean
 
     sh %Q{echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' ../app/build.gradle)" > ../app/build.gradle}
+    versionCode = sh("grep versionCode ../app/build.gradle | sed 's/.*versionCode //g'")
+    add_git_tag(build_number: versionCode)
     add_git_tag
-    push_to_git_remote
+   # push_to_git_remote
 
     sh "cd ../.. && flutter build android --release"
 
