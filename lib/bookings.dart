@@ -19,57 +19,62 @@ class BookingsState extends State<Bookings> {
 
   _getBookings() async {
     try {
-    String jwt = await getJwt();
-    if (jwt != null) {
-      String query = "query (\$token: String!) {\n"
-          "  auth(token: \$token) {\n"
-          "    self {\n"
-          "      bookings {\n"
-          "        ID\n"
-          "        start\n"
-          "        end\n"
-          "        hotel {\n"
-          "          ID\n"
-          "          name\n"
-          "        }\n"
-          "        room {\n"
-          "          ID\n"
-          "        }"
-          "      }\n"
-          "    }\n"
-          "  }\n"
-          "}";
-      _graphqlClient.runQuery(query, {
-        "token": jwt,
-      }).then((resp) {
-        setState(() {
-          _bookings = [];
+      String jwt = await getJwt();
+      if (jwt != null) {
+        String query = "query (\$token: String!) {\n"
+            "  auth(token: \$token) {\n"
+            "    self {\n"
+            "      bookings {\n"
+            "        ID\n"
+            "        start\n"
+            "        end\n"
+            "        hotel {\n"
+            "          ID\n"
+            "          name\n"
+            "        }\n"
+            "        room {\n"
+            "          ID\n"
+            "        }"
+            "      }\n"
+            "    }\n"
+            "  }\n"
+            "}";
+        _graphqlClient.runQuery(query, {
+          "token": jwt,
+        }).then((resp) {
+          setState(() {
+            _bookings = [];
 
-          if (resp["data"]["auth"] != null) {
-            List<Map<String, dynamic>> bookings =
-                resp["data"]["auth"]["self"]["bookings"];
-            if (bookings != null) {
-              bookings.forEach((v) {
-                var hotel = new Hotel(
-                  id: v["hotel"]["ID"],
-                  name: v["hotel"]["name"],
-                );
-                var room = new Room(
-                  id: v["room"]["ID"],
-                );
-                _bookings.add(new Booking(
-                  id: v["ID"],
-                  start: DateTime.parse(v["start"]),
-                  end: DateTime.parse(v["end"]),
-                  hotel: hotel,
-                  room: room,
-                ));
-              });
+            if (resp["data"]["auth"] != null) {
+              List<Map<String, dynamic>> bookings =
+                  resp["data"]["auth"]["self"]["bookings"];
+              if (bookings != null) {
+                bookings.forEach((v) {
+                  var hotel = new Hotel(
+                    id: v["hotel"]["ID"],
+                    name: v["hotel"]["name"],
+                  );
+                  var room = new Room(
+                    id: v["room"]["ID"],
+                  );
+                  print(room);
+                  _bookings.add(new Booking(
+                    id: v["ID"],
+                    start: DateTime.parse(v["start"]),
+                    end: DateTime.parse(v["end"]),
+                    hotel: hotel,
+                    room: room,
+                  ));
+                });
+              } else {
+                throw new AssertionError("No bookings returned");
+              }
+            } else {
+              throw new AssertionError("No data returned");
             }
-          }
+          });
         });
-      });
-    }
+      }
 
     } catch (error, stack) {
       Scaffold.of(context).showSnackBar(
