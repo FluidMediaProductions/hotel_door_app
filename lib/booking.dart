@@ -261,23 +261,25 @@ class BookingPageState extends State<BookingPage>
 
     Widget map = new Container(
       padding: const EdgeInsets.only(top: 20.0),
-      child: new GestureDetector(
-        child: (_hotel.address != null)
-            ? new FadeInImage(
-                placeholder: const AssetImage("images/loading.png"),
-                image: makeStaticMap(_hotel.address, MAPS_API_KEY),
-                fit: BoxFit.contain,
-              )
-            : const Image(
-                image: const AssetImage("images/loading.png"),
-                fit: BoxFit.contain,
-              ),
-        onTap: (_hotel.address != null)
-            ? () {
-                launchURL(makeMapURL(_hotel.address));
-              }
-            : () {},
-      ),
+      child: new LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        return new GestureDetector(
+          child: (_hotel.address != null)
+              ? new FadeInImage(
+            placeholder: const AssetImage("images/loading.png"),
+            image: makeStaticMap(_hotel.address, MAPS_API_KEY, (constraints.maxWidth/19*9).toInt(), constraints.maxWidth.toInt()),
+            fit: BoxFit.contain,
+          )
+              : const Image(
+            image: const AssetImage("images/loading.png"),
+            fit: BoxFit.contain,
+          ),
+          onTap: (_hotel.address != null)
+              ? () {
+            launchURL(makeMapURL(_hotel.address));
+          }
+              : () {},
+        );
+      },),
     );
 
     return new ListView(
