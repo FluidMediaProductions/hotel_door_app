@@ -5,49 +5,19 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="3.496966">
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="9.968837">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.003422">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.002217">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: ensure_git_status_clean" time="0.104848">
+      <testcase classname="fastlane.lanes" name="2: ensure_git_status_clean" time="0.103838">
         
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="3: increment_build_number" time="1.84135">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="4: commit_version_bump" time="0.281284">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="5: add_git_tag" time="0.03418">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="6: push_to_git_remote" time="4.093889">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="7: cd ../.. &amp;&amp; flutter build ios --release --no-codesign" time="140.876702">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="8: build_ios_app" time="87.457945">
-        
-          <failure message="/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:236:in `block in execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:231:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:231:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/fast_file.rb:148:in `method_missing'&#10;Fastfile:16:in `block (2 levels) in parsing_binding'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/lane_manager.rb:57:in `cruise_lane'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:75:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/cli_tools_distributor.rb:107:in `take_off'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/bin/fastlane:20:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:23:in `load'&#10;/usr/local/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:75:in `load'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:75:in `kernel_load'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:28:in `run'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:424:in `exec'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/command.rb:27:in `run'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor.rb:387:in `dispatch'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:27:in `dispatch'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/base.rb:466:in `start'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:18:in `start'&#10;/usr/local/bin/bundle:30:in `block in &lt;main&gt;'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/friendly_errors.rb:122:in `with_friendly_errors'&#10;/usr/local/bin/bundle:22:in `&lt;main&gt;'&#10;&#10;Error packaging up the application" />
+          <failure message="/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:236:in `block in execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:231:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:231:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/fast_file.rb:148:in `method_missing'&#10;Fastfile:8:in `block (2 levels) in parsing_binding'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/lane_manager.rb:57:in `cruise_lane'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:75:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/fastlane/lib/fastlane/cli_tools_distributor.rb:107:in `take_off'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.88.0/bin/fastlane:20:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:23:in `load'&#10;/usr/local/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:75:in `load'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:75:in `kernel_load'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli/exec.rb:28:in `run'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:424:in `exec'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/command.rb:27:in `run'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor.rb:387:in `dispatch'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:27:in `dispatch'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/vendor/thor/lib/thor/base.rb:466:in `start'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/cli.rb:18:in `start'&#10;/usr/local/bin/bundle:30:in `block in &lt;main&gt;'&#10;/usr/local/Cellar/ruby/2.5.0_2/lib/ruby/2.5.0/bundler/friendly_errors.rb:122:in `with_friendly_errors'&#10;/usr/local/bin/bundle:22:in `&lt;main&gt;'&#10;&#10;Git repository is dirty! Please ensure the repo is in a clean state by committing/stashing/discarding all changes first." />
         
       </testcase>
     

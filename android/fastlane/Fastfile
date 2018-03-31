@@ -1,0 +1,39 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Push a new release to internal testing"
+  lane :internal do
+    ensure_git_status_clean
+
+    sh %Q{echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' ../app/build.gradle)" > ../app/build.gradle}
+    add_git_tag
+    push_to_git_remote
+
+    sh "cd ../.. && flutter build android --release"
+
+    changelog_from_git_commits
+    upload_to_play_store(
+        track: 'internal',
+        apk: '../../build/app/outputs/apk/app-release.apk'
+    )
+
+    notification(
+      title: "TravelR",
+      message: "TravelR iOS beta build finished",
+    )
+    slack(
+      message: "Successfully distributed a new iOS beta build",
+    )
+  end
+end

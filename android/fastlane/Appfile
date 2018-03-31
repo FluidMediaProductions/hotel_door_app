@@ -1,0 +1,2 @@
+package_name("wales.fluidmedia.travelr")
+json_key_file "/Users/benjamin/google-play.json"
