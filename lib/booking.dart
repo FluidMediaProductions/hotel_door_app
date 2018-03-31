@@ -38,29 +38,28 @@ class BookingPageState extends State<BookingPage>
           "    floor\n"
           "  }\n"
           "}";
-      _graphqlClient.runQuery(query, {
+      var resp = await _graphqlClient.runQuery(query, {
         "hotelId": _hotel.id,
         "roomId": _room.id,
-      }).then((resp) {
-        setState(() {
-          if (resp["data"]["hotel"] != null) {
-            Map<String, dynamic> hotel = resp["data"]["hotel"];
-            _hotel = new Hotel(
-              id: _hotel.id,
-              name: _hotel.name,
-              checkIn: DateTime.parse(hotel["checkIn"]),
-              address: hotel["address"],
-            );
-          }
-          if (resp["data"]["room"] != null) {
-            Map<String, dynamic> room = resp["data"]["room"];
-            _room = new Room(
-              id: _room.id,
-              name: room["name"],
-              floor: room["floor"],
-            );
-          }
-        });
+      });
+      setState(() {
+        if (resp["data"]["hotel"] != null) {
+          Map<String, dynamic> hotel = resp["data"]["hotel"];
+          _hotel = new Hotel(
+            id: _hotel.id,
+            name: _hotel.name,
+            checkIn: DateTime.parse(hotel["checkIn"]),
+            address: hotel["address"],
+          );
+        }
+        if (resp["data"]["room"] != null) {
+          Map<String, dynamic> room = resp["data"]["room"];
+          _room = new Room(
+            id: _room.id,
+            name: room["name"],
+            floor: room["floor"],
+          );
+        }
       });
     } catch (error, stack) {
       _scaffoldKey.currentState.showSnackBar(
@@ -68,10 +67,12 @@ class BookingPageState extends State<BookingPage>
           content: new Text("Something went wrong"),
         ),
       );
-      await sentry.captureException(
-        exception: error,
-        stackTrace: stack,
-      );
+      if (const bool.fromEnvironment("dart.vm.product")) {
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
+      }
     }
   }
 
@@ -356,9 +357,9 @@ class BookingPageState extends State<BookingPage>
           return child;
         },
       ).toList()
-      ..add(new Container(
-        height: 8.0,
-      ))
+        ..add(new Container(
+          height: 8.0,
+        ))
         ..add(new FloatingActionButton(
           child: new AnimatedBuilder(
             animation: _fabController,

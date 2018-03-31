@@ -39,53 +39,53 @@ class BookingsState extends State<Bookings> {
             "    }\n"
             "  }\n"
             "}";
-        _graphqlClient.runQuery(query, {
+        var resp = await _graphqlClient.runQuery(query, {
           "token": jwt,
-        }).then((resp) {
-          setState(() {
-            _bookings = [];
+        });
+        setState(() {
+          _bookings = [];
 
-            if (resp["data"]["auth"] != null) {
-              List<Map<String, dynamic>> bookings =
-                  resp["data"]["auth"]["self"]["bookings"];
-              if (bookings != null) {
-                bookings.forEach((v) {
-                  var hotel = new Hotel(
-                    id: v["hotel"]["ID"],
-                    name: v["hotel"]["name"],
-                  );
-                  var room = new Room(
-                    id: v["room"]["ID"],
-                  );
-                  print(room);
-                  _bookings.add(new Booking(
-                    id: v["ID"],
-                    start: DateTime.parse(v["start"]),
-                    end: DateTime.parse(v["end"]),
-                    hotel: hotel,
-                    room: room,
-                  ));
-                });
-              } else {
-                throw new AssertionError("No bookings returned");
-              }
+          if (resp["data"]["auth"] != null) {
+            List<Map<String, dynamic>> bookings =
+                resp["data"]["auth"]["self"]["bookings"];
+            if (bookings != null) {
+              bookings.forEach((v) {
+                var hotel = new Hotel(
+                  id: v["hotel"]["ID"],
+                  name: v["hotel"]["name"],
+                );
+                var room = new Room(
+                  id: v["room"]["ID"],
+                );
+                print(room);
+                _bookings.add(new Booking(
+                  id: v["ID"],
+                  start: DateTime.parse(v["start"]),
+                  end: DateTime.parse(v["end"]),
+                  hotel: hotel,
+                  room: room,
+                ));
+              });
             } else {
-              throw new AssertionError("No data returned");
+              throw new AssertionError("No bookings returned");
             }
-          });
+          } else {
+            throw new AssertionError("No data returned");
+          }
         });
       }
-
     } catch (error, stack) {
       Scaffold.of(context).showSnackBar(
-        new SnackBar(
-          content: new Text("Something went wrong"),
-        ),
-      );
-      await sentry.captureException(
-        exception: error,
-        stackTrace: stack,
-      );
+            new SnackBar(
+              content: new Text("Something went wrong"),
+            ),
+          );
+      if (const bool.fromEnvironment("dart.vm.product")) {
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
+      }
     }
   }
 
@@ -121,13 +121,12 @@ class BookingsState extends State<Bookings> {
                   child: const Text('VIEW'),
                   onPressed: () {
                     Navigator.of(context).push(
-                      new MaterialPageRoute(
-                        builder: (_) =>
-                        new BookingPage(
-                          booking: booking,
-                        ),
-                      ),
-                    );
+                          new MaterialPageRoute(
+                            builder: (_) => new BookingPage(
+                                  booking: booking,
+                                ),
+                          ),
+                        );
                   },
                 ),
               ],

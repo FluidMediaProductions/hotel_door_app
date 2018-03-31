@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'graphql.dart';
 import 'consts.dart';
+import 'main.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -35,14 +36,15 @@ class LoginState extends State<Login> {
   }
 
   Future<bool> login() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String query = "mutation (\$email: String!, \$pass: String!) {"
-        "loginUser(email: \$email, pass: \$pass)"
-        "}";
-    return _graphqlClient.runQuery(query, {
-      "email": _email,
-      "pass": _password,
-    }).then((resp) {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String query = "mutation (\$email: String!, \$pass: String!) {"
+          "loginUser(email: \$email, pass: \$pass)"
+          "}";
+      var resp = await _graphqlClient.runQuery(query, {
+        "email": _email,
+        "pass": _password,
+      });
       if (resp["data"]["loginUser"] != null) {
         prefs.setString("jwt", resp["data"]["loginUser"]);
         return true;
@@ -50,7 +52,20 @@ class LoginState extends State<Login> {
         prefs.remove("jwt");
         return false;
       }
-    });
+    } catch (error, stack) {
+      _scaffoldKey.currentState.showSnackBar(
+        new SnackBar(
+          content: new Text("Something went wrong"),
+        ),
+      );
+      if (const bool.fromEnvironment("dart.vm.product")) {
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
+      }
+      return false;
+    }
   }
 
   Widget build(BuildContext context) {

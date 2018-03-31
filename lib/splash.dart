@@ -38,11 +38,10 @@ class SplashPageState extends State<SplashPage> {
           "  }\n"
           "}";
       try {
-        return _graphqlClient.runQuery(query, {
+        var resp = await _graphqlClient.runQuery(query, {
           "token": jwt,
-        }).then((resp) {
-          return (resp["data"]["auth"] != null);
         });
+        return (resp["data"]["auth"] != null);
       } catch (e) {
         sleep(const Duration(seconds: 1));
         return _getIsLoggedIn();
