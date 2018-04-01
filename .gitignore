@@ -13,3 +13,7 @@ android/key.properties
 ios/Runner.ipa
 ios/Runner.app*
 ..bfg-report
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
