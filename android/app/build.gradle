@@ -34,7 +34,7 @@ android {
         applicationId "wales.fluidmedia.travelr"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 11
+        versionCode 12
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
