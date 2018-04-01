@@ -285,7 +285,7 @@ class BookingPageState extends State<BookingPage>
                     image: const AssetImage("images/loading.png"),
                     fit: BoxFit.contain,
                   ),
-            onTap: (_hotel.address != null)
+            onLongPress: (_hotel.address != null)
                 ? () {
                     launchURL(makeMapURL(_hotel.address));
                   }
