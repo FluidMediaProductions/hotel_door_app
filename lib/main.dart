@@ -7,6 +7,7 @@ import 'home.dart';
 import 'login.dart';
 import 'splash.dart';
 import 'consts.dart';
+import 'theme.dart' as theme;
 
 final SentryClient sentry = new SentryClient(dsn: SENTRY_DSN);
 
@@ -20,9 +21,8 @@ class HotelDoorAppState extends State<HotelDoorApp> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Hotel Door App',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      color: theme.ThemeColours.orange[500],
+      theme: theme.customThemeData,
       routes: <String, WidgetBuilder>{
         '/home': (BuildContext context) => new Home(),
         '/login': (BuildContext context) => new Login(),
