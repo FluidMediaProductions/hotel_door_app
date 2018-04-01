@@ -35,6 +35,7 @@ platform :ios do
     )
     slack(
       message: "Successfully distributed a new iOS beta build",
+      slack_url: "https://hooks.slack.com/services/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",
     )
   end
 end

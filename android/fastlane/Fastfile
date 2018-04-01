@@ -24,6 +24,7 @@ platform :android do
 
     sh %Q{echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' ../app/build.gradle)" > ../app/build.gradle}
     versionCode = sh("grep versionCode ../app/build.gradle | sed 's/.*versionCode //g' | tr -d '\\n'")
+    sh "git add ../app/build.gradle && git commit -m 'Version bump to #{versionCode}"
     add_git_tag(build_number: versionCode)
     push_to_git_remote
 
@@ -40,6 +41,7 @@ platform :android do
     )
     slack(
       message: "Successfully distributed a new Android beta build",
+      slack_url: "https://hooks.slack.com/services/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",
     )
   end
 end
