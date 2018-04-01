@@ -277,7 +277,9 @@ class BookingPageState extends State<BookingPage>
                     image: makeStaticMap(
                         _hotel.address,
                         MAPS_API_KEY,
-                        screenSize.height ~/ 3 * ((orientation == Orientation.landscape) ? 2 : 1),
+                        screenSize.height ~/
+                            3 *
+                            ((orientation == Orientation.landscape) ? 2 : 1),
                         constraints.maxWidth.toInt()),
                     fit: BoxFit.contain,
                   )
@@ -320,12 +322,15 @@ class BookingPageState extends State<BookingPage>
               ),
               new Container(
                 width: screenSize.width / 2,
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    bookingSummary,
-                    bookingInfo,
-                  ],
+                child: new SafeArea(
+                  left: false,
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      bookingSummary,
+                      bookingInfo,
+                    ],
+                  ),
                 ),
               ),
             ],
