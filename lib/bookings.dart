@@ -96,6 +96,7 @@ class BookingsState extends State<Bookings> {
 
       return new Text(startText + " - " + endText);
     }
+
     Size screenSize = MediaQuery.of(context).size;
 
     return new Card(
@@ -153,8 +154,10 @@ class BookingsState extends State<Bookings> {
 
     return new RefreshIndicator(
       onRefresh: _getBookings,
-      child: new ListView(
-        children: cards,
+      child: new SafeArea(
+        child: new ListView(
+          children: cards,
+        ),
       ),
     );
   }
