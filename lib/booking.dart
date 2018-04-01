@@ -335,103 +335,41 @@ class BookingPageState extends State<BookingPage>
     }
   }
 
-  Widget _buildFab() {
+  Widget _buildBottomBar() {
     List<BookingAction> actions = [
       new BookingAction(
-        label: "Car Park",
+        label: "Open Car Park",
         icon: Icons.directions_car,
         action: () {},
       ),
       new BookingAction(
-        label: "Front Door",
-        icon: Icons.home,
-        action: () {
-          _openHotelDoor();
-        },
-      ),
-      new BookingAction(
-        label: "Room",
+        label: "Unlock Room",
         icon: Icons.hotel,
         action: () {
           _openRoom();
         },
       ),
-    ];
-    Color backgroundColour = Theme.of(context).cardColor;
-    Color forgroundColour = Theme.of(context).accentColor;
-    return new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: new List.generate(
-        actions.length,
-        (int i) {
-          Widget child = new Container(
-            height: 50.0,
-            width: 200.0,
-            alignment: FractionalOffset.center,
-            child: new ScaleTransition(
-              scale: new CurvedAnimation(
-                parent: _fabController,
-                curve: new Interval(0.0, 1.0 - i / actions.length / 2.0,
-                    curve: Curves.easeOut),
-              ),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  new Container(
-                    child: new Text(actions[i].label),
-                    padding: const EdgeInsets.all(5.0),
-                    margin: const EdgeInsets.only(right: 5.0),
-                    color: Colors.white70,
-                  ),
-                  new FloatingActionButton(
-                    heroTag: actions[i].label,
-                    mini: true,
-                    backgroundColor: backgroundColour,
-                    child: new Icon(
-                      actions[i].icon,
-                      color: forgroundColour,
-                    ),
-                    onPressed: () {
-                      _fabController.reverse();
-                      actions[i].action();
-                    },
-                  ),
-                  new Container(
-                    width: 8.0,
-                  )
-                ],
-              ),
-            ),
-          );
-          return child;
+      new BookingAction(
+        label: "Unlock Front Door",
+        icon: Icons.home,
+        action: () {
+          _openHotelDoor();
         },
-      ).toList()
-        ..add(new Container(
-          height: 8.0,
-        ))
-        ..add(new FloatingActionButton(
-          child: new AnimatedBuilder(
-            animation: _fabController,
-            builder: (BuildContext context, Widget child) {
-              return new Transform(
-                transform:
-                    new Matrix4.rotationZ(_fabController.value * 0.5 * PI),
-                alignment: FractionalOffset.center,
-                child: new Icon(
-                  _fabController.isDismissed ? Icons.lock_open : Icons.close,
-                ),
-              );
-            },
-          ),
-          onPressed: () {
-            if (_fabController.isDismissed) {
-              _fabController.forward();
-            } else {
-              _fabController.reverse();
-            }
-          },
-        )),
+      ),
+    ];
+
+    return new BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: 1,
+      items: actions.map((action) {
+        return new BottomNavigationBarItem(
+          icon: new Icon(action.icon),
+          title: new Text(action.label),
+        );
+      }).toList(),
+      onTap: (index) {
+        actions[index].action();
+      },
     );
   }
 
@@ -442,7 +380,7 @@ class BookingPageState extends State<BookingPage>
         title: new Text('View booking'),
       ),
       body: _buildBody(),
-      floatingActionButton: _buildFab(),
+      bottomNavigationBar: _buildBottomBar(),
     );
   }
 }
