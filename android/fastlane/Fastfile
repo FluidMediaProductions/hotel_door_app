@@ -32,10 +32,10 @@ platform :android do
 
     notification(
       title: "TravelR",
-      message: "TravelR iOS beta build finished",
+      message: "TravelR Android beta build finished",
     )
     slack(
-      message: "Successfully distributed a new iOS beta build",
+      message: "Successfully distributed a new Android beta build",
     )
   end
 end
