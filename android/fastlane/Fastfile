@@ -18,10 +18,10 @@ platform :android do
 
     changelog_from_git_commits
 
-    #sh %Q{echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' ../app/build.gradle)" > ../app/build.gradle}
-    #versionCode = sh("grep versionCode ../app/build.gradle | sed 's/.*versionCode //g' | tr -d '\\n'")
-    #add_git_tag(build_number: versionCode)
-    #push_to_git_remote
+    sh %Q{echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' ../app/build.gradle)" > ../app/build.gradle}
+    versionCode = sh("grep versionCode ../app/build.gradle | sed 's/.*versionCode //g' | tr -d '\\n'")
+    add_git_tag(build_number: versionCode)
+    push_to_git_remote
 
     sh "cd ../.. && flutter build apk --release"
 
