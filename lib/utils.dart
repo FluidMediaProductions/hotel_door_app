@@ -53,16 +53,15 @@ Future<bool> biometricsRequired() async {
   return biometricsRequired;
 }
 
-authenticateAction(BuildContext context, Function action) async {
+authenticateAction(BuildContext context, Function action, [bool alwaysRequired]) async {
   bool biometrics = await biometricsRequired();
-  if (!biometrics) {
+  if (!biometrics && !((alwaysRequired == null) ? false : alwaysRequired)) {
     action();
   } else {
     LocalAuthentication localAuth = new LocalAuthentication();
     try {
       bool didAuthenticate = await localAuth.authenticateWithBiometrics(
-        localizedReason: "Please authentice",
-        stickyAuth: true,
+        localizedReason: "Please authentice to complete action",
       );
 
       if (didAuthenticate) {

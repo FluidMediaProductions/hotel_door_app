@@ -34,7 +34,7 @@ class SettingsState extends State<Settings> {
         _biometricsRequired = state;
         prefs.setBool("biometrics", _biometricsRequired);
       });
-    });
+    }, true);
   }
 
   Widget build(BuildContext context) {
