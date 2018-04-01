@@ -10,3 +10,6 @@ ios/.generated/
 packages
 .flutter-plugins
 android/key.properties
+ios/Runner.ipa
+ios/Runner.app*
+..bfg-report
