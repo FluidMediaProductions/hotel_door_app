@@ -277,7 +277,7 @@ class BookingPageState extends State<BookingPage>
                     image: makeStaticMap(
                         _hotel.address,
                         MAPS_API_KEY,
-                        screenSize.height ~/ 3 * 2,
+                        screenSize.height ~/ 3 * ((orientation == Orientation.landscape) ? 2 : 1),
                         constraints.maxWidth.toInt()),
                     fit: BoxFit.contain,
                   )
