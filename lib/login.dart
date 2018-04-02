@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'graphql.dart';
 import 'consts.dart';
 import 'main.dart';
+import 'theme.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -70,14 +71,7 @@ class LoginState extends State<Login> {
 
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context).copyWith(
-          brightness: Brightness.light,
-          primaryColor: Colors.white,
-          hintColor: Colors.white70,
-          textTheme: new TextTheme(
-            subhead: new TextStyle(
-              color: Colors.white,
-            ),
-          ),
+          hintColor: Colors.white,
         );
 
     return new Theme(
@@ -85,7 +79,7 @@ class LoginState extends State<Login> {
       child: new Scaffold(
         key: _scaffoldKey,
         body: new Container(
-          color: Colors.blue,
+          color: customThemeData.primaryColor,
           padding: const EdgeInsets.all(24.0),
           child: new Center(
             child: new Form(
@@ -120,7 +114,7 @@ class LoginState extends State<Login> {
                         'LOGIN',
                         style: const TextStyle(color: Colors.white),
                       ),
-                      color: Colors.blueAccent,
+                      color: ThemeColours.orange[700],
                     ),
                     constraints: const BoxConstraints(
                       minWidth: double.INFINITY,
