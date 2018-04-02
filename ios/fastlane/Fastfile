@@ -18,13 +18,22 @@ platform :ios do
     add_git_tag
     push_to_git_remote
 
-    match(type: "appstore")
+    sync_code_signing(type: "appstore")
 
-    sh "cd ../.. && flutter build ios --release"
+    sh "cd ../.. && flutter build ios --release --no-codesign"
+
+    update_project_provisioning(
+          xcodeproj: 'Runner.xcodeproj',
+          target_filter: 'Runner',
+          build_configuration: 'Release',
+          profile: ENV['sigh_io.flutter.demo.gallery_appstore_profile-path'],
+    )
+
     build_ios_app(
       workspace: 'Runner.xcworkspace',
       scheme: 'Runner',
       export_method: 'app-store',
+      codesigning_identity: 'iOS Distribution',
     )
 
     upload_to_testflight
