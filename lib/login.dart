@@ -87,6 +87,9 @@ class LoginState extends State<Login> {
               child: new Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  new Image(
+                    image: new AssetImage("images/logo-long-inverse.png"),
+                  ),
                   new TextFormField(
                     validator: (value) => !_emailRegexp.hasMatch(value)
                         ? 'Not a valid email.'

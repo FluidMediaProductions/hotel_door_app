@@ -24,3 +24,5 @@ flutter:
   assets:
       - images/hotel.jpg
       - images/loading.png
+      - images/logo-long.png
+      - images/logo-long-inverse.png
