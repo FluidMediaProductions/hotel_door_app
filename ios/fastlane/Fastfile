@@ -7,7 +7,9 @@ platform :ios do
   lane :beta do
     ensure_git_status_clean
 
+    build_number = get_build_number(xcodeproj: "Runner.xcodeproj")
     changelog_from_git_commits(
+      between: ["builds/iosbeta/#{build_number}", "HEAD"]
       pretty: "- %h %an (%ae): %s",
       date_format: "short",
       merge_commit_filtering: "exclude_merges",
