@@ -20,15 +20,6 @@ platform :ios do
 
     sync_code_signing(type: "appstore")
 
-    sh "cd ../.. && flutter build ios --release --no-codesign"
-
-    update_project_provisioning(
-          xcodeproj: 'Runner.xcodeproj',
-          target_filter: 'Runner',
-          build_configuration: 'Release',
-          profile: ENV['sigh_io.flutter.demo.gallery_appstore_profile-path'],
-    )
-
     build_ios_app(
       workspace: 'Runner.xcworkspace',
       scheme: 'Runner',
