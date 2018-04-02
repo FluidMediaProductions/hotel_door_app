@@ -20,14 +20,14 @@ platform :ios do
 
     match(type: "appstore")
 
-    sh "cd ../.. && flutter build ios --release --no-codesign"
-    #build_ios_app(
-    #  workspace: 'Runner.xcworkspace',
-    #  scheme: 'Runner',
-    #  export_method: 'app-store',
-    #)
+    sh "cd ../.. && flutter build ios --release"
+    build_ios_app(
+      workspace: 'Runner.xcworkspace',
+      scheme: 'Runner',
+      export_method: 'app-store',
+    )
 
-    #upload_to_testflight
+    upload_to_testflight
 
     notification(
       title: "TravelR",
