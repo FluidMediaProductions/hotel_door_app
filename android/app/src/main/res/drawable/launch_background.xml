@@ -4,6 +4,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/logo_long" />
+            android:src="@drawable/logo_long" />
     </item>
 </layer-list>
