@@ -24,7 +24,6 @@ platform :ios do
       workspace: 'Runner.xcworkspace',
       scheme: 'Runner',
       export_method: 'app-store',
-      codesigning_identity: 'iOS Distribution',
     )
 
     upload_to_testflight
