@@ -99,6 +99,7 @@ class HomeState extends State<Home> {
     );
 
     return new ListView(
+      padding: EdgeInsets.zero,
       children: links,
     );
   }
