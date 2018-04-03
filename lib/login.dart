@@ -71,7 +71,13 @@ class LoginState extends State<Login> {
 
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context).copyWith(
-          hintColor: Colors.white,
+          primaryColor: Colors.white,
+          hintColor: Colors.white70,
+          textTheme: new TextTheme(
+            subhead: new TextStyle(
+              color: Colors.white,
+            ),
+          ),
         );
 
     return new Theme(
@@ -115,9 +121,9 @@ class LoginState extends State<Login> {
                       onPressed: _submit,
                       child: new Text(
                         'LOGIN',
-                        style: const TextStyle(color: Colors.white),
+                        style: new TextStyle(color: ThemeColours.orange),
                       ),
-                      color: ThemeColours.orange[700],
+                      color: theme.primaryColor,
                     ),
                     constraints: const BoxConstraints(
                       minWidth: double.INFINITY,
