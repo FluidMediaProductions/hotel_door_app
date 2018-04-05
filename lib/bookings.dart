@@ -88,6 +88,61 @@ class BookingsState extends State<Bookings> {
     }
   }
 
+  @override
+  initState() {
+    super.initState();
+
+    _getBookings();
+  }
+
+  Widget build(BuildContext context) {
+    var cards = [];
+
+    _bookings.forEach((v) {
+      cards.add(
+        new GestureDetector(
+          child: new BookingCard(v),
+        ),
+      );
+    });
+
+    return new RefreshIndicator(
+      onRefresh: _getBookings,
+      child: new SafeArea(
+        child: new ListView(
+          children: cards,
+        ),
+      ),
+    );
+  }
+}
+
+class BookingCard extends StatefulWidget {
+  final Booking booking;
+
+  BookingCard(this.booking);
+
+  @override
+  BookingCardState createState() => new BookingCardState();
+}
+
+class BookingCardState extends State<BookingCard>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  initState() {
+    super.initState();
+    _controller = new AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Widget _makeBookingCard(Booking booking) {
     Widget formatDate(DateTime start, DateTime end) {
       var format = new DateFormat("yMMMEd");
@@ -120,15 +175,7 @@ class BookingsState extends State<Bookings> {
               children: [
                 new FlatButton(
                   child: const Text('VIEW'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                          new MaterialPageRoute(
-                            builder: (_) => new BookingPage(
-                                  booking: booking,
-                                ),
-                          ),
-                        );
-                  },
+                  onPressed: _openBooking,
                 ),
               ],
             ),
@@ -138,27 +185,38 @@ class BookingsState extends State<Bookings> {
     );
   }
 
-  @override
-  initState() {
-    super.initState();
-
-    _getBookings();
+  void _openBooking() {
+      Navigator.of(context).push(
+        new MaterialPageRoute(
+          builder: (_) => new BookingPage(
+            booking: widget.booking,
+          ),
+        ),
+      );
   }
 
   Widget build(BuildContext context) {
-    var cards = [];
-
-    _bookings.forEach((v) {
-      cards.add(_makeBookingCard(v));
-    });
-
-    return new RefreshIndicator(
-      onRefresh: _getBookings,
-      child: new SafeArea(
-        child: new ListView(
-          children: cards,
-        ),
-      ),
+    final animation = new Tween(
+            begin: const Offset(0.0, 0.0), end: const Offset(-0.2, 0.0))
+        .animate(new CurveTween(curve: Curves.decelerate).animate(_controller));
+    return new GestureDetector(
+      onHorizontalDragUpdate: (data) {
+        setState(() {
+          _controller.value -= data.primaryDelta / context.size.width;
+        });
+      },
+      onHorizontalDragEnd: (data) {
+        if (data.primaryVelocity > 2500) {
+          _controller.animateTo(.0);
+        } else if (_controller.value >= .5 || data.primaryVelocity < -2500) {
+          _controller.animateTo(1.0);
+          _openBooking();
+        } else {
+          _controller.animateTo(.0);
+        }
+      },
+      child: new SlideTransition(
+          position: animation, child: _makeBookingCard(widget.booking)),
     );
   }
 }
