@@ -5,8 +5,6 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new release to TestFlight"
   lane :beta do
-    ensure_git_status_clean
-
     build_number = get_build_number(xcodeproj: "Runner.xcodeproj")
     changelog_from_git_commits(
       between: ["builds/iosbeta/#{build_number}", "HEAD"],

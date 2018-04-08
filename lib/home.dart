@@ -2,7 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bookings.dart';
 import 'settings.dart';
+import 'graphql.dart';
+import 'consts.dart';
 import 'utils.dart';
+import 'main.dart';
+
+class UserInheritedWidget extends InheritedWidget {
+  const UserInheritedWidget({Key key, this.user, Widget child})
+      : super(key: key, child: child);
+
+  final Map<String, dynamic> user;
+
+  @override
+  bool updateShouldNotify(UserInheritedWidget old) {
+    return user != old.user;
+  }
+
+  static UserInheritedWidget of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(UserInheritedWidget);
+  }
+}
 
 class Home extends StatefulWidget {
   @override
@@ -15,6 +34,7 @@ class HomeState extends State<Home> {
     "email": "",
   };
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _graphqlClient = new GraphQLClient(GRAPHQL_SERVER_URL);
 
   var _pages = {};
 
@@ -25,6 +45,7 @@ class HomeState extends State<Home> {
   initState() {
     super.initState();
 
+    _getUserInfo();
     _pages = {
       "bookings": {
         "title": "Bookings",
@@ -34,19 +55,57 @@ class HomeState extends State<Home> {
       "settings": {
         "title": "Settings",
         "icon": new Icon(Icons.settings),
-        "widget": new Settings(),
+        "widget": new Settings(
+          onUpdate: _getUserInfo,
+        ),
       }
     };
-
-    _getUserInfo();
     _changePage(_pages.keys.first);
   }
 
   _getUserInfo() async {
-    Map userInfo = await getUserInfo();
-    setState(() {
-      _userInfo = userInfo;
-    });
+    try {
+      String jwt = await getJwt();
+      if (jwt != null) {
+        String query = "query (\$token: String!) {\n"
+            "  auth(token: \$token) {\n"
+            "    self {\n"
+            "      name\n"
+            "      email\n"
+            "    }\n"
+            "  }\n"
+            "}";
+        var resp = await _graphqlClient.runQuery(query, {
+          "token": jwt,
+        });
+        setState(() {
+          if (resp["data"]["auth"] != null) {
+            Map<String, dynamic> self = resp["data"]["auth"]["self"];
+            if (self != null) {
+              setState(() {
+                _userInfo = self;
+              });
+            } else {
+              throw new AssertionError("No data returned");
+            }
+          } else {
+            throw new AssertionError("No data returned");
+          }
+        });
+      }
+    } catch (error, stack) {
+      Scaffold.of(context).showSnackBar(
+            new SnackBar(
+              content: new Text("Something went wrong"),
+            ),
+          );
+      if (const bool.fromEnvironment("dart.vm.product")) {
+        await sentry.captureException(
+          exception: error,
+          stackTrace: stack,
+        );
+      }
+    }
   }
 
   _changePage(String name) {
@@ -113,7 +172,10 @@ class HomeState extends State<Home> {
       drawer: new Drawer(
         child: _makeDrawerLinks(),
       ),
-      body: _currentPageWidget,
+      body: new UserInheritedWidget(
+        user: _userInfo,
+        child: _currentPageWidget,
+      ),
     );
   }
 }
