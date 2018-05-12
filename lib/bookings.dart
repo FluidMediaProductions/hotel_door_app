@@ -74,9 +74,10 @@ class BookingsState extends State<Bookings> {
         });
       }
     } catch (error, stack) {
+      print(error);
       Scaffold.of(context).showSnackBar(
             new SnackBar(
-              content: new Text("Something went wrong"),
+              content: new Text("Something went wrong: " + error.toString()),
             ),
           );
       if (const bool.fromEnvironment("dart.vm.product")) {

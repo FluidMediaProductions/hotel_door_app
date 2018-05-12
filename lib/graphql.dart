@@ -5,6 +5,10 @@ import 'package:flutter/services.dart';
 class GraphQlException implements Exception {
   List<String> errors;
   GraphQlException(this.errors);
+
+  String toString() {
+    return "GraphQLException: " + this.errors.join(", ");
+  }
 }
 
 class GraphQLClient {

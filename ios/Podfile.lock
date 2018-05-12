@@ -8,14 +8,14 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `Pods/.symlinks/flutter/ios-release`)
+  - Flutter (from `Pods/.symlinks/flutter/ios`)
   - local_auth (from `Pods/.symlinks/plugins/local_auth-0.2.0/ios`)
   - shared_preferences (from `Pods/.symlinks/plugins/shared_preferences-0.3.3/ios`)
   - url_launcher (from `Pods/.symlinks/plugins/url_launcher-2.0.2/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: Pods/.symlinks/flutter/ios-release
+    :path: Pods/.symlinks/flutter/ios
   local_auth:
     :path: Pods/.symlinks/plugins/local_auth-0.2.0/ios
   shared_preferences:

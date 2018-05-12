@@ -54,9 +54,10 @@ class LoginState extends State<Login> {
         return false;
       }
     } catch (error, stack) {
+      print(error);
       _scaffoldKey.currentState.showSnackBar(
         new SnackBar(
-          content: new Text("Something went wrong"),
+          content: new Text("Something went wrong: " + error.toString()),
         ),
       );
       if (const bool.fromEnvironment("dart.vm.product")) {

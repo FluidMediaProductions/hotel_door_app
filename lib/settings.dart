@@ -182,11 +182,12 @@ class SettingsState extends State<Settings> {
           widget.onUpdate();
         }
       } catch (error, stack) {
+        print(error);
         Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: new Text("Something went wrong"),
-              ),
-            );
+          new SnackBar(
+            content: new Text("Something went wrong: " + error.toString()),
+          ),
+        );
         if (const bool.fromEnvironment("dart.vm.product")) {
           await sentry.captureException(
             exception: error,
@@ -249,10 +250,10 @@ class SettingsState extends State<Settings> {
       } catch (error, stack) {
         print(error);
         Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: new Text("Something went wrong"),
-              ),
-            );
+          new SnackBar(
+            content: new Text("Something went wrong: " + error.toString()),
+          ),
+        );
         if (const bool.fromEnvironment("dart.vm.product")) {
           await sentry.captureException(
             exception: error,
@@ -313,11 +314,12 @@ class SettingsState extends State<Settings> {
           widget.onUpdate();
         }
       } catch (error, stack) {
+        print(error);
         Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: new Text("Something went wrong"),
-              ),
-            );
+          new SnackBar(
+            content: new Text("Something went wrong: " + error.toString()),
+          ),
+        );
         if (const bool.fromEnvironment("dart.vm.product")) {
           await sentry.captureException(
             exception: error,

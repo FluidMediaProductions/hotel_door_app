@@ -23,7 +23,6 @@ class BookingPageState extends State<BookingPage>
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Hotel _hotel;
-  AnimationController _fabController;
   Room _room;
 
   _getBookingDetails() async {
@@ -62,9 +61,10 @@ class BookingPageState extends State<BookingPage>
         }
       });
     } catch (error, stack) {
+      print(error);
       _scaffoldKey.currentState.showSnackBar(
         new SnackBar(
-          content: new Text("Something went wrong"),
+          content: new Text("Something went wrong: " + error.toString()),
         ),
       );
       if (const bool.fromEnvironment("dart.vm.product")) {
@@ -106,9 +106,10 @@ class BookingPageState extends State<BookingPage>
           });
         }
       } catch (error, stack) {
+        print(error);
         _scaffoldKey.currentState.showSnackBar(
           new SnackBar(
-            content: new Text("Something went wrong"),
+            content: new Text("Something went wrong: " + error.toString()),
           ),
         );
         await sentry.captureException(
@@ -149,9 +150,10 @@ class BookingPageState extends State<BookingPage>
           });
         }
       } catch (error, stack) {
+        print(error);
         _scaffoldKey.currentState.showSnackBar(
           new SnackBar(
-            content: new Text("Something went wrong"),
+            content: new Text("Something went wrong: " + error.toString()),
           ),
         );
         await sentry.captureException(
@@ -166,12 +168,6 @@ class BookingPageState extends State<BookingPage>
   initState() {
     super.initState();
 
-    _fabController = new AnimationController(
-      vsync: this,
-      duration: new Duration(
-        milliseconds: 500,
-      ),
-    );
     _hotel = widget.booking.hotel;
     _room = widget.booking.room;
     _getBookingDetails();
